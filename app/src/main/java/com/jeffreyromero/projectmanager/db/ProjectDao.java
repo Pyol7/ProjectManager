@@ -18,13 +18,10 @@ import java.util.List;
 public interface ProjectDao {
 
     @Query("SELECT * FROM project_table ORDER BY dateCreated ASC")
-    LiveData<List<Project>> getAllProjects();
+    LiveData<List<Project>> getAll();
 
     @Query("SELECT * FROM project_table WHERE id = :id")
     LiveData<Project> getById(int id);
-
-    @Query("SELECT * FROM project_table WHERE name = :name")
-    LiveData<Project> getByName(String name);
 
     @Insert
     long insert(Project project);

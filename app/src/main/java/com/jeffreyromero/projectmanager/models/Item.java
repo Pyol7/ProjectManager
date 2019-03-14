@@ -5,27 +5,25 @@ import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.jeffreyromero.projectmanager.models.itemTypes.ItemType;
-
 import static androidx.room.ForeignKey.CASCADE;
 
 @Entity(tableName = "item_table",
         foreignKeys = {
-        @ForeignKey(
-                entity = Project.class,
-                parentColumns = "id",
-                childColumns = "projectID",
-                onDelete = CASCADE
-        ),
-        @ForeignKey(
-                entity = ItemType.class,
-                parentColumns = "id",
-                childColumns = "itemTypeID",
-                onDelete = CASCADE
-        )},
+                @ForeignKey(
+                        entity = Project.class,
+                        parentColumns = "id",
+                        childColumns = "projectId",
+                        onDelete = CASCADE
+                ),
+                @ForeignKey(
+                        entity = ItemType.class,
+                        parentColumns = "id",
+                        childColumns = "itemTypeId",
+                        onDelete = CASCADE
+                )},
         indices = {
-                @Index(value = "projectID"),
-                @Index(value = "itemTypeID")
+                @Index(value = "projectId"),
+                @Index(value = "itemTypeId")
         }
 )
 public class Item {
@@ -35,13 +33,14 @@ public class Item {
     private double width;
     private double length;
     private double height;
-    private int itemTypeID;
-    private int projectID;
+    // Each item belongs to a project
+    private int projectId;
+    // Each item has an itemType
+    private int itemTypeId;
 
-    public Item(int itemTypeID, String name, int  projectID) {
-        this.itemTypeID = itemTypeID;
-        this.name = name;
-        this.projectID = projectID;
+    public Item(int itemTypeId, int projectId) {
+        this.itemTypeId = itemTypeId;
+        this.projectId = projectId;
     }
 
     public int getId() {
@@ -84,20 +83,19 @@ public class Item {
         this.height = height;
     }
 
-    public int getItemTypeID() {
-        return itemTypeID;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setItemTypeID(int itemTypeID) {
-        this.itemTypeID = itemTypeID;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
-    public int getProjectID() {
-        return projectID;
+    public int getItemTypeId() {
+        return itemTypeId;
     }
 
-    public void setProjectID(int projectID) {
-        this.projectID = projectID;
+    public void setItemTypeId(int itemTypeId) {
+        this.itemTypeId = itemTypeId;
     }
-
 }

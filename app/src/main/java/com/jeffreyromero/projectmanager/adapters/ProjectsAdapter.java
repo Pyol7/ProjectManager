@@ -29,11 +29,16 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
         this.listener = listener;
     }
 
+    public void setProjects(List<Project> projects){
+        this.projects = projects;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ProjectViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.projects_list_item, viewGroup, false);
+                .inflate(R.layout.projects_adapter_list_item, viewGroup, false);
         return new ProjectViewHolder(itemView);
     }
 
@@ -74,10 +79,4 @@ public class ProjectsAdapter extends RecyclerView.Adapter<ProjectsAdapter.Projec
             });
         }
     }
-
-    public void setProjects(List<Project> projects){
-        this.projects = projects;
-        notifyDataSetChanged();
-    }
-
 }

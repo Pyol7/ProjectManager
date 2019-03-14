@@ -11,15 +11,6 @@ import java.util.List;
 public class ProjectRepository {
 
     private ProjectDao projectDao;
-    private static onAsyncTasksListener listener;
-
-    public interface onAsyncTasksListener{
-        void onInsertPostExecute(Long projectID);
-    }
-
-    public void registerListener(onAsyncTasksListener listener){
-        ProjectRepository.listener = listener;
-    }
 
     public ProjectRepository(Application application) {
         // Create the Project database
@@ -27,16 +18,12 @@ public class ProjectRepository {
         this.projectDao = appDatabase.projectDao();
     }
 
-    public LiveData<List<Project>> getAllProjects(){
-        return projectDao.getAllProjects();
+    public LiveData<List<Project>> getAll(){
+        return projectDao.getAll();
     }
 
     public LiveData<Project> getById(int id) {
         return projectDao.getById(id);
-    }
-
-    public LiveData<Project> getByName(String name) {
-        return projectDao.getByName(name);
     }
 
     public void insert(Project project){
@@ -68,12 +55,6 @@ public class ProjectRepository {
         @Override
         protected Long doInBackground(Project... projects) {
             return this.projectDao.insert(projects[0]);
-        }
-
-        @Override
-        protected void onPostExecute(Long aLong) {
-            super.onPostExecute(aLong);
-            listener.onInsertPostExecute(aLong);
         }
 
     }

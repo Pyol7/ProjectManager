@@ -17,7 +17,7 @@ import androidx.navigation.Navigation;
 
 import com.jeffreyromero.projectmanager.R;
 import com.jeffreyromero.projectmanager.models.Project;
-import com.jeffreyromero.projectmanager.viewModels.ProjectsViewModel;
+import com.jeffreyromero.projectmanager.viewModels.ProjectViewModel;
 
 
 public class AddProjectFragment extends Fragment {
@@ -39,14 +39,14 @@ public class AddProjectFragment extends Fragment {
 
         final EditText nameET = view.findViewById(R.id.name_et);
 
-        // Get the projectsViewModel and scope it to this fragment.
-        final ProjectsViewModel projectsViewModel = ViewModelProviders.of(this).get(ProjectsViewModel.class);
+        // Get the projectViewModel and scope it to this fragment.
+        final ProjectViewModel projectViewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
 
         view.findViewById(R.id.add_project_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                projectsViewModel.insert(new Project(nameET.getText().toString()));
+                projectViewModel.insert(new Project(nameET.getText().toString()));
 
                 InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);

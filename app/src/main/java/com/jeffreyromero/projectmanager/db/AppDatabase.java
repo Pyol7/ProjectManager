@@ -2,6 +2,7 @@ package com.jeffreyromero.projectmanager.db;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -11,20 +12,32 @@ import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.jeffreyromero.projectmanager.models.Item;
-import com.jeffreyromero.projectmanager.models.itemTypes.DroppedCeiling;
-import com.jeffreyromero.projectmanager.models.itemTypes.DrywallPartition;
+import com.jeffreyromero.projectmanager.models.ItemType;
+import com.jeffreyromero.projectmanager.models.ItemTypeMaterialJoin;
+import com.jeffreyromero.projectmanager.models.Material;
 import com.jeffreyromero.projectmanager.models.Project;
-import com.jeffreyromero.projectmanager.models.itemTypes.ItemType;
+import com.jeffreyromero.projectmanager.models.materials.CeilingTile;
+import com.jeffreyromero.projectmanager.models.materials.Hanger;
+import com.jeffreyromero.projectmanager.models.materials.WallAngle;
 import com.jeffreyromero.projectmanager.utilities.Converters;
 
-@Database(entities = {Project.class, Item.class, ItemType.class}, version = 1)
+@Database(entities = {
+        Project.class,
+        Item.class,
+        ItemType.class,
+        Material.class,
+        ItemTypeMaterialJoin.class
+}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
 
+    private static final String TAG = "AppDatabase";
     // Room generates the code of these methods when the database builder is executed.
     public abstract ProjectDao projectDao();
     public abstract ItemDao itemDao();
     public abstract ItemTypeDao itemTypeDao();
+    public abstract MaterialDao materialDao();
+    public abstract ItemTypeMaterialJoinDao itemTypeMaterialJoinDao();
 
     // This holds the database singleton that we can access statically from anywhere.
     private static AppDatabase sInstance;
@@ -66,26 +79,57 @@ public abstract class AppDatabase extends RoomDatabase {
         private ProjectDao projectDao;
         private ItemDao itemDao;
         private ItemTypeDao itemTypeDao;
+        private MaterialDao materialDao;
+        private ItemTypeMaterialJoinDao itemTypeMaterialJoinDao;
 
         private PopulateDBAsyncTask(AppDatabase appDatabase) {
             this.projectDao = appDatabase.projectDao();
             this.itemDao = appDatabase.itemDao();
             this.itemTypeDao = appDatabase.itemTypeDao();
+            this.materialDao = appDatabase.materialDao();
+            this.itemTypeMaterialJoinDao = appDatabase.itemTypeMaterialJoinDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            // Populate itemTypes table
-            itemTypeDao.insert(new ItemType(1, "Dropped Ceiling"));
-            itemTypeDao.insert(new ItemType(2, "Drywall Ceiling"));
-            itemTypeDao.insert(new ItemType(3, "Drywall Partition"));
 
-            // Create sample project
-            int id = (int) projectDao.insert(new Project("Sample Project"));
+            // Add all item types to the itemTypes table
+            int droppedCeilingId = (int) itemTypeDao.insert(new ItemType("Dropped Ceiling"));
+            int DrywallCeilingId = (int) itemTypeDao.insert(new ItemType("Drywall Ceiling"));
+            int drywallPartitionId = (int) itemTypeDao.insert(new ItemType("Drywall Partition"));
 
-            // Add items to sample project
-            itemDao.insert(new DroppedCeiling("Living Room", id));
-            itemDao.insert(new DrywallPartition("Kitchen", id));
+            // Add all Materials to the materials table.
+            Material ceilingTile = new CeilingTile();
+            ceilingTile.setName("Generic Ceiling Tile");
+            ceilingTile.setWidth(2);
+            ceilingTile.setLength(2);
+            ceilingTile.setUnitPrice(11.50);
+            ceilingTile.setQuantity(30);
+
+            Material wallAngle = new WallAngle();
+            wallAngle.setName("Wall Angles (Donn)");
+            wallAngle.setLength(10);
+            wallAngle.setUnitPrice(6.50);
+            wallAngle.setQuantity(22);
+
+            Material hanger = new Hanger();
+            hanger.setName("Hit-it Fasteners");
+            hanger.setUnitPrice(1.50);
+            hanger.setQuantity(100);
+
+            int materialId1 = (int) materialDao.insert(ceilingTile);
+            int materialId2 = (int) materialDao.insert(wallAngle);
+            int materialId3 = (int) materialDao.insert(hanger);
+
+            // Build DroppedCeiling material list by associating item type with material and
+            // adding those entries to the ItemTypeMaterialJoin pivot table
+            int joinId1 = (int) itemTypeMaterialJoinDao
+                    .insert(new ItemTypeMaterialJoin(droppedCeilingId, materialId1));
+            int joinId2 = (int) itemTypeMaterialJoinDao
+                    .insert(new ItemTypeMaterialJoin(droppedCeilingId, materialId2));
+            int joinId3 = (int) itemTypeMaterialJoinDao
+                    .insert(new ItemTypeMaterialJoin(droppedCeilingId, materialId3));
+
             return null;
         }
     }

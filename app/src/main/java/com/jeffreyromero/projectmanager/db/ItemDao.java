@@ -18,16 +18,16 @@ import java.util.List;
 public interface ItemDao {
 
     @Query("SELECT * FROM item_table ORDER BY id ASC")
-    LiveData<List<Item>> getAllItems();
+    LiveData<List<Item>> getAll();
 
     @Query("SELECT * FROM item_table WHERE id = :id")
     LiveData<Item> getById(int id);
 
-    @Query("SELECT * FROM item_table WHERE projectID = :projectID")
-    LiveData<List<Item>> getItemsForProject(int projectID);
+    @Query("SELECT * FROM item_table WHERE projectId = :projectId")
+    LiveData<List<Item>> getByProjectId(int projectId);
 
     @Insert
-    void insert(Item item);
+    long insert(Item item);
 
     @Update
     void update(Item item);

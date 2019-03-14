@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jeffreyromero.projectmanager.R;
 import com.jeffreyromero.projectmanager.models.Item;
+import com.jeffreyromero.projectmanager.models.Material;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     @Override
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.items_list_item, viewGroup, false);
+                .inflate(R.layout.items_adapter_list_item, viewGroup, false);
         return new ItemViewHolder(itemView);
     }
 
@@ -41,7 +42,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
         Item currentItem = items.get(i);
         itemViewHolder.leftTV.setText(currentItem.getName());
-        itemViewHolder.rightTV.setText(String.valueOf(currentItem.getItemTypeID()));
+        itemViewHolder.rightTV.setText(String.valueOf(currentItem.getItemTypeId()));
     }
 
     @Override

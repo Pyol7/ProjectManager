@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "abc0bd8e5df7b5d7c3556560a297f1c3",
+    "identityHash": "d4494459fc703c1b692b70438a4579ff",
     "entities": [
       {
         "tableName": "project_table",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "item_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `width` REAL NOT NULL, `length` REAL NOT NULL, `height` REAL NOT NULL, `itemTypeID` INTEGER NOT NULL, `projectID` INTEGER NOT NULL, FOREIGN KEY(`projectID`) REFERENCES `project_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemTypeID`) REFERENCES `item_type_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `width` REAL NOT NULL, `length` REAL NOT NULL, `height` REAL NOT NULL, `projectId` INTEGER NOT NULL, `itemTypeId` INTEGER NOT NULL, FOREIGN KEY(`projectId`) REFERENCES `project_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`itemTypeId`) REFERENCES `item_type_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -71,14 +71,14 @@
             "notNull": true
           },
           {
-            "fieldPath": "itemTypeID",
-            "columnName": "itemTypeID",
+            "fieldPath": "projectId",
+            "columnName": "projectId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "projectID",
-            "columnName": "projectID",
+            "fieldPath": "itemTypeId",
+            "columnName": "itemTypeId",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -91,20 +91,20 @@
         },
         "indices": [
           {
-            "name": "index_item_table_projectID",
+            "name": "index_item_table_projectId",
             "unique": false,
             "columnNames": [
-              "projectID"
+              "projectId"
             ],
-            "createSql": "CREATE  INDEX `index_item_table_projectID` ON `${TABLE_NAME}` (`projectID`)"
+            "createSql": "CREATE  INDEX `index_item_table_projectId` ON `${TABLE_NAME}` (`projectId`)"
           },
           {
-            "name": "index_item_table_itemTypeID",
+            "name": "index_item_table_itemTypeId",
             "unique": false,
             "columnNames": [
-              "itemTypeID"
+              "itemTypeId"
             ],
-            "createSql": "CREATE  INDEX `index_item_table_itemTypeID` ON `${TABLE_NAME}` (`itemTypeID`)"
+            "createSql": "CREATE  INDEX `index_item_table_itemTypeId` ON `${TABLE_NAME}` (`itemTypeId`)"
           }
         ],
         "foreignKeys": [
@@ -113,7 +113,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "projectID"
+              "projectId"
             ],
             "referencedColumns": [
               "id"
@@ -124,7 +124,7 @@
             "onDelete": "CASCADE",
             "onUpdate": "NO ACTION",
             "columns": [
-              "itemTypeID"
+              "itemTypeId"
             ],
             "referencedColumns": [
               "id"
@@ -134,7 +134,7 @@
       },
       {
         "tableName": "item_type_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -153,16 +153,151 @@
           "columnNames": [
             "id"
           ],
-          "autoGenerate": false
+          "autoGenerate": true
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "material_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `subType` TEXT, `name` TEXT, `width` REAL NOT NULL, `length` REAL NOT NULL, `unitPrice` REAL NOT NULL, `spacing` INTEGER NOT NULL, `quantity` REAL NOT NULL, `coefficient` REAL NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "subType",
+            "columnName": "subType",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "width",
+            "columnName": "width",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "length",
+            "columnName": "length",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitPrice",
+            "columnName": "unitPrice",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "spacing",
+            "columnName": "spacing",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "quantity",
+            "columnName": "quantity",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "coefficient",
+            "columnName": "coefficient",
+            "affinity": "REAL",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "item_type_material_join_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`itemTypeId` INTEGER NOT NULL, `materialId` INTEGER NOT NULL, PRIMARY KEY(`itemTypeId`, `materialId`), FOREIGN KEY(`itemTypeId`) REFERENCES `item_type_table`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION , FOREIGN KEY(`materialId`) REFERENCES `material_table`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "fields": [
+          {
+            "fieldPath": "itemTypeId",
+            "columnName": "itemTypeId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "materialId",
+            "columnName": "materialId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "itemTypeId",
+            "materialId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [
+          {
+            "name": "index_item_type_material_join_table_itemTypeId",
+            "unique": false,
+            "columnNames": [
+              "itemTypeId"
+            ],
+            "createSql": "CREATE  INDEX `index_item_type_material_join_table_itemTypeId` ON `${TABLE_NAME}` (`itemTypeId`)"
+          },
+          {
+            "name": "index_item_type_material_join_table_materialId",
+            "unique": false,
+            "columnNames": [
+              "materialId"
+            ],
+            "createSql": "CREATE  INDEX `index_item_type_material_join_table_materialId` ON `${TABLE_NAME}` (`materialId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "item_type_table",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "itemTypeId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          },
+          {
+            "table": "material_table",
+            "onDelete": "NO ACTION",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "materialId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"abc0bd8e5df7b5d7c3556560a297f1c3\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"d4494459fc703c1b692b70438a4579ff\")"
     ]
   }
 }

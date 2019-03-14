@@ -12,43 +12,37 @@ import com.jeffreyromero.projectmanager.models.Item;
 
 import java.util.List;
 
-public class ItemsViewModel extends AndroidViewModel implements ItemDao {
+public class ItemViewModel extends AndroidViewModel {
 
     private ItemRepository itemRepository;
 
-    public ItemsViewModel(@NonNull Application application) {
+    public ItemViewModel(@NonNull Application application) {
         super(application);
         this.itemRepository = new ItemRepository(application);
     }
 
-    @Override
-    public LiveData<List<Item>> getAllItems(){
-        return itemRepository.getAllItems();
+    public LiveData<List<Item>> getAll(){
+        return itemRepository.getAll();
     }
 
-    @Override
     public LiveData<Item> getById(int id) {
         return itemRepository.getById(id);
     }
 
-    @Override
-    public LiveData<List<Item>> getItemsForProject(int project_id) {
-        return itemRepository.getItemsForProject(project_id);
+    public LiveData<List<Item>> getByProjectId(int projectId) {
+        return itemRepository.getByProjectId(projectId);
     }
 
-    @Override
-    public void insert(Item task){
-        itemRepository.insert(task);
+    public void insert(Item item){
+        itemRepository.insert(item);
     }
 
-    @Override
-    public void update(Item task){
-        itemRepository.update(task);
+    public void update(Item item){
+        itemRepository.update(item);
     }
 
-    @Override
-    public void delete(Item task) {
-        itemRepository.delete(task);
+    public void delete(Item item) {
+        itemRepository.delete(item);
     }
 
 }

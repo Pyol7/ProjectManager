@@ -5,44 +5,39 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.jeffreyromero.projectmanager.models.itemTypes.ItemType;
+import com.jeffreyromero.projectmanager.models.ItemType;
 
 import java.util.List;
 
 
-public class ItemTypeRepository implements ItemTypeDao {
+public class ItemTypeRepository {
 
     private ItemTypeDao itemTypeDao;
 
     public ItemTypeRepository(Application application) {
-        // Create the Item database
+        // Create the ItemType database
         AppDatabase appDatabase = AppDatabase.getInstance(application);
         this.itemTypeDao = appDatabase.itemTypeDao();
     }
 
-    @Override
-    public LiveData<List<ItemType>> getAllItemTypes(){
-        return itemTypeDao.getAllItemTypes();
+    public LiveData<List<ItemType>> getAll(){
+        return itemTypeDao.getAll();
     }
 
-    @Override
     public LiveData<ItemType> getById(int id) {
         return itemTypeDao.getById(id);
     }
 
-    @Override
-    public void insert(ItemType item){
-        new InsertItemTypeAsyncTask(itemTypeDao).execute(item);
+    public void insert(ItemType itemType){
+        new InsertItemTypeAsyncTask(itemTypeDao).execute(itemType);
     }
 
-    @Override
-    public void update(ItemType item){
-        new UpdateItemTypeAsyncTask(itemTypeDao).execute(item);
+    public void update(ItemType itemType){
+        new UpdateItemTypeAsyncTask(itemTypeDao).execute(itemType);
     }
 
-    @Override
-    public void delete(ItemType item) {
-        new DeleteItemTypeAsyncTask(itemTypeDao).execute(item);
+    public void delete(ItemType itemType) {
+        new DeleteItemTypeAsyncTask(itemTypeDao).execute(itemType);
     }
 
     /**
@@ -51,7 +46,7 @@ public class ItemTypeRepository implements ItemTypeDao {
      * Must be static to avoid memory leak by holding an instance of ItemTypeRepository.
      */
 
-    private static class InsertItemTypeAsyncTask extends AsyncTask<ItemType, Void, Void> {
+    private static class InsertItemTypeAsyncTask extends AsyncTask<ItemType, Void, Long> {
         private ItemTypeDao itemTypeDao;
 
         private InsertItemTypeAsyncTask(ItemTypeDao itemTypeDao) {
@@ -59,9 +54,8 @@ public class ItemTypeRepository implements ItemTypeDao {
         }
 
         @Override
-        protected Void doInBackground(ItemType... items) {
-            itemTypeDao.insert(items[0]);
-            return null;
+        protected Long doInBackground(ItemType... itemTypes) {
+            return itemTypeDao.insert(itemTypes[0]);
         }
     }
 
@@ -73,8 +67,8 @@ public class ItemTypeRepository implements ItemTypeDao {
         }
 
         @Override
-        protected Void doInBackground(ItemType... items) {
-            itemTypeDao.update(items[0]);
+        protected Void doInBackground(ItemType... itemTypes) {
+            itemTypeDao.update(itemTypes[0]);
             return null;
         }
     }
@@ -87,8 +81,8 @@ public class ItemTypeRepository implements ItemTypeDao {
         }
 
         @Override
-        protected Void doInBackground(ItemType... items) {
-            itemTypeDao.delete(items[0]);
+        protected Void doInBackground(ItemType... itemTypes) {
+            itemTypeDao.delete(itemTypes[0]);
             return null;
         }
     }

@@ -7,7 +7,8 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.jeffreyromero.projectmanager.models.itemTypes.ItemType;
+import com.jeffreyromero.projectmanager.models.Item;
+import com.jeffreyromero.projectmanager.models.ItemType;
 
 import java.util.List;
 
@@ -18,13 +19,13 @@ import java.util.List;
 public interface ItemTypeDao {
 
     @Query("SELECT * FROM item_type_table ORDER BY id ASC")
-    LiveData<List<ItemType>> getAllItemTypes();
+    LiveData<List<ItemType>> getAll();
 
     @Query("SELECT * FROM item_type_table WHERE id = :id")
     LiveData<ItemType> getById(int id);
 
     @Insert
-    void insert(ItemType itemType);
+    long insert(ItemType itemType);
 
     @Update
     void update(ItemType itemType);

@@ -35,35 +35,76 @@
         android:name="com.jeffreyromero.projectmanager.views.ProjectFragment"
         android:label="Project Fragment"
         tools:layout="@layout/project_fragment">
-        <argument
-            android:name="projectID"
-            android:defaultValue="1"
-            app:argType="integer" />
         <action
-            android:id="@+id/action_projectFragment_to_selectItemType"
-            app:destination="@id/selectItemType"
+            android:id="@+id/action_projectFragment_to_item_type_selection_fragment"
+            app:destination="@id/itemTypeSelectionFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_projectFragment_to_itemFragment"
+            app:destination="@id/itemFragment"
             app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
-        android:id="@+id/selectItemType"
-        android:name="com.jeffreyromero.projectmanager.views.createNewItemDialogs.SelectItemType"
-        android:label="Select an Item Type"
-        tools:layout="@layout/dialog_select_item_type" >
+        android:id="@+id/itemTypeSelectionFragment"
+        android:name="com.jeffreyromero.projectmanager.views.itemCreator.ItemTypeSelectionFragment"
+        android:label="item_type_selection_fragment"
+        tools:layout="@layout/dialog_select_item_type">
         <action
-            android:id="@+id/action_selectItemType_to_droppedCeilingDetails"
-            app:destination="@id/droppedCeilingDetails"
+            android:id="@+id/action_itemTypeSelectionFragment_to_droppedCeilingCreatorFragment"
+            app:destination="@id/droppedCeilingCreatorFragment"
             app:enterAnim="@anim/nav_default_enter_anim" />
-        <argument
-            android:name="projectID"
-            app:argType="integer" />
+        <action
+            android:id="@+id/action_selectItemType_to_drywallCeilingDetails"
+            app:destination="@id/drywallCeilingDetails"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_selectItemType_to_drywallPartitionDetails"
+            app:destination="@id/drywallPartitionDetails"
+            app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
-        android:id="@+id/droppedCeilingDetails"
-        android:name="com.jeffreyromero.projectmanager.views.createNewItemDialogs.DroppedCeilingDetails"
-        android:label="dropped_ceiling_details"
-        tools:layout="@layout/dropped_ceiling_details" >
-        <argument
-            android:name="projectID"
-            app:argType="integer" />
+        android:id="@+id/droppedCeilingCreatorFragment"
+        android:name="com.jeffreyromero.projectmanager.views.itemCreator.DroppedCeilingCreatorFragment"
+        android:label="dropped_ceiling_creator_fragment"
+        tools:layout="@layout/dropped_ceiling">
+        <action
+            android:id="@+id/action_droppedCeilingCreatorFragment_to_showNewItemFragment"
+            app:destination="@id/showNewItemFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
     </fragment>
+    <fragment
+        android:id="@+id/drywallCeilingDetails"
+        android:name="com.jeffreyromero.projectmanager.views.itemCreator.DrywallCeilingCreatorFragment"
+        android:label="drywall_ceiling_details"
+        tools:layout="@layout/drywall_ceiling_details" >
+        <action
+            android:id="@+id/action_drywallCeilingDetails_to_createItemFragment"
+            app:destination="@id/showNewItemFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/drywallPartitionDetails"
+        android:name="com.jeffreyromero.projectmanager.views.itemCreator.DrywallPartitionCreatorFragment"
+        android:label="drywall_partition_details"
+        tools:layout="@layout/drywall_partition_details" >
+        <action
+            android:id="@+id/action_drywallPartitionDetails_to_createItemFragment"
+            app:destination="@id/showNewItemFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/showNewItemFragment"
+        android:name="com.jeffreyromero.projectmanager.views.itemCreator.ShowNewItemFragment"
+        android:label="show_new_item_fragment"
+        tools:layout="@layout/show_new_item_fragment">
+        <action
+            android:id="@+id/action_createItemFragment_to_projectFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popUpTo="@+id/projectFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemFragment"
+        android:name="com.jeffreyromero.projectmanager.views.ItemFragment"
+        android:label="item_fragment"
+        tools:layout="@layout/show_new_item_fragment" />
 </navigation>

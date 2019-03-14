@@ -23,15 +23,16 @@ import com.jeffreyromero.projectmanager.R;
 import com.jeffreyromero.projectmanager.adapters.ItemsAdapter;
 import com.jeffreyromero.projectmanager.models.Item;
 import com.jeffreyromero.projectmanager.models.Project;
-import com.jeffreyromero.projectmanager.viewModels.ItemsViewModel;
-import com.jeffreyromero.projectmanager.viewModels.ProjectsViewModel;
+import com.jeffreyromero.projectmanager.viewModels.ItemViewModel;
+import com.jeffreyromero.projectmanager.viewModels.ProjectViewModel;
 
 import java.util.List;
 
 public class ProjectFragment extends Fragment implements
         ItemsAdapter.OnItemClickListener {
 
-    private static final String PROJECT_ID_KEY = "projectIdKey";
+    private static final String PROJECT_ID_KEY = "projectId";
+    private static final String ITEM_ID_KEY = "itemId";
     private ItemsAdapter adapter;
     private int projectID;
 
@@ -39,7 +40,9 @@ public class ProjectFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Get the passed in project id
-        projectID = getArguments().getInt(PROJECT_ID_KEY);
+        if (getArguments() != null) {
+            projectID = getArguments().getInt(PROJECT_ID_KEY, 0);
+        }
 
         // Set up list adapter
         adapter = new ItemsAdapter();
@@ -65,22 +68,22 @@ public class ProjectFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         // Get View Models
-        ProjectsViewModel projectsViewModel = ViewModelProviders.of(this).get(ProjectsViewModel.class);
-        ItemsViewModel itemsViewModel = ViewModelProviders.of(this).get(ItemsViewModel.class);
+        ProjectViewModel projectViewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
+        ItemViewModel itemViewModel = ViewModelProviders.of(this).get(ItemViewModel.class);
 
         // Get and observe the passed in project
-        projectsViewModel.getById(projectID).observe(this, new Observer<Project>() {
+        projectViewModel.getById(projectID).observe(this, new Observer<Project>() {
             @Override
             public void onChanged(Project project) {
                 Toast.makeText(getActivity(), "project changed", Toast.LENGTH_SHORT).show();
-                // Set the Title
+                // Set the project name as the Title
                 TextView projectNameTV = view.findViewById(R.id.project_name_tv);
                 projectNameTV.setText(project.getName());
             }
         });
 
         // Get, observe and set the items to the itemsAdapter
-        itemsViewModel.getItemsForProject(projectID).observe(this, new Observer<List<Item>>() {
+        itemViewModel.getByProjectId(projectID).observe(this, new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
                 adapter.setItems(items);
@@ -92,17 +95,19 @@ public class ProjectFragment extends Fragment implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Navigate to SelectItemType
+                // Navigate to ItemTypeSelectionFragment
                 Bundle bundle = new Bundle();
                 bundle.putInt(PROJECT_ID_KEY, projectID);
-                Navigation.findNavController(view).navigate(R.id.action_projectFragment_to_selectItemType, bundle);
+                Navigation.findNavController(view).navigate(R.id.action_projectFragment_to_item_type_selection_fragment, bundle);
             }
         });
     }
 
     @Override
     public void onItemClick(int itemID) {
-        Toast.makeText(getActivity(), "clicked", Toast.LENGTH_SHORT).show();
+        Bundle bundle = new Bundle();
+        bundle.putInt(ITEM_ID_KEY, itemID);
+        Navigation.findNavController(getView()).navigate(R.id.action_projectFragment_to_itemFragment, bundle);
     }
 
     @Override

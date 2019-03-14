@@ -1,16 +1,15 @@
-package com.jeffreyromero.projectmanager.models.itemTypes;
+package com.jeffreyromero.projectmanager.models;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "item_type_table")
 public class ItemType {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
 
-    public ItemType(int id, String name) {
-        this.id = id;
+    public ItemType(String name) {
         this.name = name;
     }
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,7 +18,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.jeffreyromero.projectmanager.R;
 import com.jeffreyromero.projectmanager.adapters.ProjectsAdapter;
 import com.jeffreyromero.projectmanager.models.Project;
-import com.jeffreyromero.projectmanager.viewModels.ProjectsViewModel;
+import com.jeffreyromero.projectmanager.viewModels.ProjectViewModel;
 
 import java.util.List;
 
@@ -29,8 +28,8 @@ import java.util.List;
 public class ProjectsFragment extends Fragment implements
         ProjectsAdapter.OnItemClickListener {
 
-    private static final String PROJECT_ID_KEY = "projectIdKey";
-    private ProjectsViewModel mViewModel;
+    private static final String PROJECT_ID_KEY = "projectId";
+    private ProjectViewModel mViewModel;
     private ProjectsAdapter adapter;
 
     @Override
@@ -57,10 +56,10 @@ public class ProjectsFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         // Get the mViewModel and scope it to this fragment.
-        mViewModel = ViewModelProviders.of(this).get(ProjectsViewModel.class);
+        mViewModel = ViewModelProviders.of(this).get(ProjectViewModel.class);
 
         // Get all projects, setup a observer on it and update the list adapter when ever it changes
-        mViewModel.getAllProjects().observe(this, new Observer<List<Project>>() {
+        mViewModel.getAll().observe(this, new Observer<List<Project>>() {
             @Override
             public void onChanged(@Nullable List<Project> projects) {
                 adapter.setProjects(projects);

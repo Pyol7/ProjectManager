@@ -1,17 +1,17 @@
 package com.jeffreyromero.projectmanager.views;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
+import com.google.gson.Gson;
 import com.jeffreyromero.projectmanager.R;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,11 +22,19 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        // Add item sub type list to Shared Preferences
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("itemSubTypeList", new Gson().toJson(buildItemSubTypeList()));
+        editor.commit();
+    }
 
-        // Let NavigationUI control up and title display on navigation
-//        NavigationUI.setupActionBarWithNavController(this, navController);
-
+    private List<String> buildItemSubTypeList() {
+        List<String> itemTypes = new ArrayList<>();
+        itemTypes.add("Dropped Ceiling");
+        itemTypes.add("Drywall Ceiling");
+        itemTypes.add("Drywall Partition");
+        return itemTypes;
     }
 
     @Override

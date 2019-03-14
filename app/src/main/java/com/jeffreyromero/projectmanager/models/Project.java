@@ -7,6 +7,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * A Project has many Items and an Item belongs to one project.
+ */
 @Entity(tableName = "project_table")
 public class Project {
     @PrimaryKey(autoGenerate = true)

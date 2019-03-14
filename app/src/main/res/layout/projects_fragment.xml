@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/title_tv"
         app:layout_constraintVertical_bias="0.0"
         tools:itemCount="3"
-        tools:listitem="@layout/projects_list_item" />
+        tools:listitem="@layout/projects_adapter_list_item" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_project_fab"
